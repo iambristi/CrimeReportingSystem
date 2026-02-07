@@ -31,6 +31,14 @@ composer install
 ```bash
 copy .env.example .env
 ```
+### Run Migrations: Create the necessary tables in your database:
+```bash
+php artisan migrate
+```
+### Seed Database: Create the predefined Admin and Police accounts:
+```bash
+php artisan db:seed
+```
 ### Generate Application Key
 ```bash
 php artisan key:generate
@@ -38,6 +46,23 @@ php artisan key:generate
 ### Run the Application
 ```bash
 php artisan serve
+```
+## Frontend Setup (React + Vite):
+### Open a new terminal window and follow these steps to run the React application:
+```bash
+cd ../frontend
+```
+### Install Dependencies:
+```bash
+npm install
+```
+### Configure API URL: Ensure the baseURL in your src/axios.js matches your backend local server:
+```bash
+baseURL: 'http://127.0.0.1:8000/'
+```
+### Run Development Server:
+```bash
+npm run dev
 ```
 ### How to Contribute?
 
