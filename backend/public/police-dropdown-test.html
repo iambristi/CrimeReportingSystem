@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Complaint Registration</title>
+</head>
+<body>
+
+<h2>Complaint Registration Form</h2>
+
+<form id="complaintForm"
+      action="http://127.0.0.1:8000/api/complaint"
+      method="POST"
+      enctype="multipart/form-data">
+
+  <!-- ================= SECTION 1 ================= -->
+  <h3>Complainant Information</h3>
+
+  <input name="name" placeholder="Name" required><br><br>
+  <input name="phone" placeholder="Phone Number" required><br><br>
+  <textarea name="address" placeholder="Address" required></textarea><br><br>
+  <input name="city" placeholder="City" required><br><br>
+  <input name="state" placeholder="State" required><br><br>
+  <input name="zip" placeholder="ZIP Code" required><br><br>
+
+  <!-- ================= SECTION 2 ================= -->
+  <h3>Incident Details</h3>
+
+  <!-- OPTIONAL -->
+  <textarea name="accused_names"
+            placeholder="Person(s) complained against (Optional)"></textarea><br><br>
+
+  <input type="date" name="incident_date" required><br><br>
+  <input type="time" name="incident_time" required><br><br>
+  <input name="incident_location" placeholder="Location of Incident" required><br><br>
+
+  <!-- ================= SECTION 3 ================= -->
+  <h3>Police Unit Information</h3>
+
+  <label>Police Unit Type *</label><br>
+  <select id="unitType" required>
+    <option value="">Select Unit Type</option>
+  </select><br><br>
+
+  <label>Police Unit Name *</label><br>
+  <select id="unitName" disabled required>
+    <option value="">Select Police Unit</option>
+  </select><br><br>
+
+  <label>Police Station *</label><br>
+  <select id="stationName" disabled required>
+    <option value="">Select Police Station</option>
+  </select><br><br>
+
+  <!-- hidden IDs sent to backend -->
+  <input type="hidden" name="police_unit_id" id="police_unit_id">
+  <input type="hidden" name="police_station_id" id="police_station_id">
+
+  <!-- ================= SECTION 4 ================= -->
+  <h3>Complaint Details</h3>
+
+  <label>Nature of Complaint *</label><br>
+  <select name="complaint_type_id" id="complaintType" required>
+    <option value="">Select Complaint Type</option>
+  </select><br><br>
+
+  <textarea name="description"
+            placeholder="Detailed Description"
+            required></textarea><br><br>
+
+  <!-- OPTIONAL -->
+  <label>Evidence Upload (Optional)</label><br>
+  <input type="file" name="evidence"><br><br>
+
+  <button type="submit">Submit Complaint</button>
+
+</form>
+
+<p id="errorMsg" style="color:red;"></p>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+const form = document.getElementById('complaintForm');
+const errorMsg = document.getElementById('errorMsg');
+
+const unitType = document.getElementById('unitType');
+const unitName = document.getElementById('unitName');
+const stationName = document.getElementById('stationName');
+
+const policeUnitId = document.getElementById('police_unit_id');
+const policeStationId = document.getElementById('police_station_id');
+const complaintType = document.getElementById('complaintType');
+
+/* ========= LOAD POLICE UNIT TYPES ========= */
+fetch('http://127.0.0.1:8000/api/police-unit-types')
+  .then(res => res.json())
+  .then(types => {
+    types.forEach(type => {
+      unitType.innerHTML += `<option value="${type}">${type}</option>`;
+    });
+  });
+
+/* ========= LOAD POLICE UNITS BY TYPE ========= */
+unitType.addEventListener('change', () => {
+  unitName.innerHTML = '<option value="">Select Police Unit</option>';
+  stationName.innerHTML = '<option value="">Select Police Station</option>';
+
+  unitName.disabled = true;
+  stationName.disabled = true;
+
+  policeUnitId.value = '';
+  policeStationId.value = '';
+
+  if (!unitType.value) return;
+
+  fetch(`http://127.0.0.1:8000/api/police-units/${unitType.value}`)
+    .then(res => res.json())
+    .then(units => {
+      unitName.disabled = false;
+      units.forEach(unit => {
+        unitName.innerHTML +=
+          `<option value="${unit.id}">${unit.name}</option>`;
+      });
+    });
+});
+
+/* ========= LOAD POLICE STATIONS ========= */
+unitName.addEventListener('change', () => {
+  stationName.innerHTML = '<option value="">Select Police Station</option>';
+  stationName.disabled = true;
+
+  policeUnitId.value = unitName.value;
+  policeStationId.value = '';
+
+  if (!unitName.value) return;
+
+  fetch(`http://127.0.0.1:8000/api/police-stations/${unitName.value}`)
+    .then(res => res.json())
+    .then(stations => {
+      stationName.disabled = false;
+      stations.forEach(station => {
+        stationName.innerHTML +=
+          `<option value="${station.id}">${station.station_name}</option>`;
+      });
+    });
+});
+
+/* ========= STORE STATION ID ========= */
+stationName.addEventListener('change', () => {
+  policeStationId.value = stationName.value;
+});
+
+/* ========= LOAD COMPLAINT TYPES ========= */
+fetch('http://127.0.0.1:8000/api/complaint-types')
+  .then(res => res.json())
+  .then(types => {
+    types.forEach(type => {
+      complaintType.innerHTML +=
+        `<option value="${type.id}">${type.name}</option>`;
+    });
+  });
+
+
+/* ========= FINAL VALIDATION ========= */
+form.addEventListener('submit', function (e) {
+  errorMsg.textContent = '';
+
+  if (
+    !policeUnitId.value ||
+    !policeStationId.value ||
+    !complaintType.value
+  ) {
+    e.preventDefault();
+    errorMsg.textContent =
+      '⚠️ Please fill all mandatory fields before submitting.';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+/* ===== Page Container ===== */
+.complaint-container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Ensure all elements calculate width correctly */
+.complaint-container *, .complaint-container *::before, .complaint-container *::after {
+  box-sizing: border-box;
+}
+
+/* ===== Headings ===== */
+.complaint-container h2 {
+  text-align: center;
+  color: #1f3c88;
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.section-title {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 19px;
+  font-weight: bold;
+  color: #1f3c88;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+/* ===== Form Layout ===== */
+.form-row {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping if space is too tight */
+  gap: 20px; /* Space between side-by-side boxes */
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.form-group {
+  flex: 1; /* Default growth for items in a row */
+  display: flex;
+  flex-direction: column;
+  min-width: 150px; /* Prevents shrinking to zero */
+  margin-bottom: 15px;
+}
+
+/* Special sizing for the City/State/ZIP row to prevent overlap */
+.address-row .form-group {
+  flex: 1 1 180px; 
+}
+
+/* ===== Inputs & Selects ===== */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 14px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1f3c88;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(31, 60, 136, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* ===== Labels ===== */
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ===== Buttons ===== */
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.submit-btn {
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px 35px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #256428;
+  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
+}
+
+.reset-btn {
+  background-color: #c62828;
+  color: white;
+  padding: 12px 35px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: #9f1f1f;
+  box-shadow: 0 4px 8px rgba(198, 40, 40, 0.3);
+}
+
+/* Tablet/Mobile Adjustments */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
